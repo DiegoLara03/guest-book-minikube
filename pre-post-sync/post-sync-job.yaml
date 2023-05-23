@@ -3,8 +3,11 @@ kind: Job
 metadata:
   name: after
   annotations:
-    argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/hook.post-sync: |
+      #!/bin/bash
+      set -euo pipefail
+      kubectl get service/kustomize-guestbook-ui -o jsonpath='{.spec.clusterIP}' -n argocd
 spec:
   template:
     spec:
